@@ -1,15 +1,62 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    collegeName: "",
+    password: "",
+    confirmPassword: "",
+  });
+  // const [error, setError] = useState("");
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+    
+    // const {
+    //   firstName,
+    //   lastName,
+    //   email,
+    //   collegeName,
+    //   password,
+    //   confirmPassword,
+    // } = formData;
+    // if (
+    //   firstName === "" ||
+    //   lastName === "" ||
+    //   email == "" ||
+    //   collegeName == "" ||
+    //   password == "" ||
+    //   confirmPassword == ""
+    // ) {
+    //   setError("All fields are required");
+    //   return;
+    // }
+    // if (password !== confirmPassword) {
+    //   setError("Passwords do not match");
+    //   return;
+    // }
+    try {
+      const res = await axios.post("http://localhost:3000/register", formData);
+      console.log("User registered successfully", res.data);
+      res.status(200).send("User registered successfully");
+    } catch (error) {
+      console.error("error while registering", error);
+    }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
       <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
           Register
         </h1>
-
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
           {/* firstname Field */}
           <div className="flex flex-col">
             <label
@@ -22,6 +69,7 @@ const Login = () => {
               type="firstName"
               id="firstName"
               placeholder="Aditya"
+              onChange={handleChange}
               className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
             />
           </div>
@@ -37,6 +85,7 @@ const Login = () => {
               type="lastName"
               id="lastName"
               placeholder="Kumar"
+              onChange={handleChange}
               className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
             />
           </div>
@@ -52,6 +101,7 @@ const Login = () => {
               type="email"
               id="email"
               placeholder="you@example.com"
+              onChange={handleChange}
               className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
             />
           </div>
@@ -67,6 +117,7 @@ const Login = () => {
               type="collegeName"
               id="collegeName"
               placeholder="BIT MESREA"
+              onChange={handleChange}
               className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
             />
           </div>
@@ -82,6 +133,7 @@ const Login = () => {
               type="password"
               id="password"
               placeholder="••••••••"
+              onChange={handleChange}
               className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
             />
           </div>
@@ -97,6 +149,7 @@ const Login = () => {
               type="password"
               id="confirmPassword"
               placeholder="••••••••"
+              onChange={handleChange}
               className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
             />
           </div>
@@ -108,8 +161,15 @@ const Login = () => {
           >
             Register
           </button>
+          <div className="text-center text-gray-700 dark:text-white">
+            Already registered?{" "}
+            <Link to="/login" className="text-red-500 hover:underline">
+              Login Now
+            </Link>
+          </div>
+
           {/* Google Log In */}
-          <button
+          {/* <button
             type="button"
             className="w-full bg-white dark:bg-gray-700 text-black dark:text-white py-2 rounded-md border flex items-center justify-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-600 transition"
           >
@@ -120,7 +180,7 @@ const Login = () => {
               width={20}
               alt="Google"
             />
-          </button>
+          </button> */}
         </form>
       </div>
     </div>

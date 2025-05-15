@@ -1,17 +1,34 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post("http://localhost:3000/login", formData);
+      console.log("Response from frontend", res);
+    } catch (error) {
+      console.error("Error while sending data", error);
+    }
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
       <div className="w-full max-w-md bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg">
         <h1 className="text-3xl font-bold text-center text-gray-800 dark:text-white mb-6">
           Log In
         </h1>
-        <form className="space-y-5">
+        <form className="space-y-5" onSubmit={handleSubmit}>
           {/* Email Field */}
           <div className="flex flex-col">
             <label
@@ -21,9 +38,9 @@ const Login = () => {
               Email
             </label>
             <input
-              onClick={(e) => setEmail(e.target.value)}
               type="email"
               id="email"
+              onChange={handleChange}
               placeholder="you@example.com"
               className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
             />
@@ -38,9 +55,9 @@ const Login = () => {
               Password
             </label>
             <input
-              onClick={(e) => setPassword(e.target.value)}
               type="password"
               id="password"
+              onChange={handleChange}
               placeholder="••••••••"
               className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
             />
@@ -63,7 +80,7 @@ const Login = () => {
           </div>
 
           {/* Google Log In */}
-          <button
+          {/* <button
             type="button"
             className="w-full bg-white dark:bg-gray-700 text-black dark:text-white py-2 rounded-md border flex items-center justify-center gap-2 hover:bg-gray-100 dark:hover:bg-gray-600 transition"
           >
@@ -74,7 +91,7 @@ const Login = () => {
               width={20}
               alt="Google"
             />
-          </button>
+          </button> */}
         </form>
       </div>
     </div>
